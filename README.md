@@ -30,7 +30,7 @@ This project will contains follow components:
 
 - User: card of this user, Life point, A timer(each user only have 30 seconds for each round), role(Master, good guy, Bad guy)
 
-- Heap: Cards can assign, shuffle function.
+- Heap: Cards can assign, shuffle the heap randomly.
 
 - Recycle Heap: Recording the cards already been used (I think it's same data structer with 'Heap' and we can swap them directly after 'Heap' been run out)
 
