@@ -4,10 +4,11 @@
 
 class Hero(object):
     """A class represent hero in the game"""
-    def __init__(self, name, health, skills):
+    def __init__(self, name, lifePoint, skills):
         self._name = name
-        self._health = health
+        self._lifePoint = lifePoint
         self._skill = skills
+        self._selected = False
 
     @property
     def name(self):
@@ -18,10 +19,26 @@ class Hero(object):
         self._name = newName
 
     @property
-    def health(self):
-        return self._health
+    def lifePoint(self):
+        return self._lifePoint
 
-    @health.setter
-    def health(self, newHealth):
-        self.health = newHealth
+    @lifePoint.setter
+    def lifePoint(self, newLifePoint):
+        self.lifePoint = newLifePoint
+
+    @property
+    def skill(self):
+        return self._skill
+
+    @skill.setter
+    def skill(self, sk):
+        self._skill = sk
+
+    @property
+    def selected(self):
+        return self._selected
+
+    @selected.setter
+    def selected(self, isSelected):
+        self._selected = isSelected
 

@@ -1,3 +1,6 @@
+import json
+from GameTable.gameServer import GAMESERVER
+
 class player(object):
     
     def __init__(self, id, senderClient):
@@ -11,15 +14,18 @@ class player(object):
         self.hero = None
 
         # weapon card
-        self.warpon = None
+        self.waepon = None
         self.armor = None
         self.plus = None
         self.minus = None
         self.cards = []
 
-        # game rule
+        # game rule (The card can reach other player or not)
         self.supplyShortage = None
         self.indulgence = None
+    
+    def __eq__(self, other):
+        return (self.id == other.id and self.hero == other.forwardheroLinks)
     
     def getSender(self):
         return self.sender
@@ -30,5 +36,70 @@ class player(object):
     def getMaxLifePoint(self):
         return self.maxLifePoint
 
-    def setMaxLifePoint(self):
-        
+    def setMaxLifePoint(self, mLifePoint):
+        self.maxLifePoint = mLifePoint
+    
+    def getSupplyShortage(self):
+        return self.supplyShortage
+
+    def setSupplyShortage(self, sShortage):
+        self.supplyShortage = sShortage
+
+    def getIndulgence(self):
+        return self.supplyShortage
+
+    def setIndulgence(self, indulgence):
+        self.indulgence = indulgence
+    
+    def getHero(self):
+        return self.hero
+
+    def setHero(self, hero):
+        self.hero = hero
+    
+    def getLifePoint(self):
+        return self.lifePoint
+
+    def setLifePoint(self, lPoint):
+        self.lifePoint = lPoint
+
+    def getWeapon(self):
+        return self.waepon
+
+    def setWeapon(self, weapon):
+        self.waepon = weapon
+    
+    def getArmor(self):
+        return self.armor
+
+    def setArmor(self, armor):
+        self.armor = armor
+
+    def getPlus(self):
+        return self.plus
+
+    def setPlus(self, plus):
+        self.plus = plus
+
+    def getMinus(self):
+        return self.minus
+
+    def setMinus(self, minus):
+        self.minus = minus
+    
+    def getCards(self):
+        return self.cards
+
+    def setCards(self, cards):
+        self.cards = cards
+
+    def sendSelf(self, message):
+        payload = json.dumps(message, ensure_ascii = False).encode('utf8')
+        self.sender.sendMessage(payload, isBinary = False)
+
+    def broadcastIgnoreSelf(self, message):
+        connectionList = GAMESERVER.getConnections()
+        for client in connectionList:
+            if client.getId() != self.getId():
+                payload = json.dumps(message, ensure_ascii = False).encode('utf8')
+                client.sendMessage(payload, isBinary = False)

@@ -18,3 +18,8 @@ class Message(object):
 
     def setData(self, data):
         self.data = data
+
+    def addData(self, key, value):
+        if self.data == None:
+             self.data = {}
+        self.data[key] = value
