@@ -3,7 +3,7 @@
 """
 
 class Message(object):
-    def __init__(self, action, data=None):
+    def __init__(self, action=None, data=None):
         self.action = action
         self.data = data
     

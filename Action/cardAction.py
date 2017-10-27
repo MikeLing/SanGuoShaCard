@@ -3,7 +3,7 @@ import json
 from Models.card import Cards
 from Data.data import GAMEDATA
 from Models.card import Type
-from GameTable.gameTable import Game
+from GameTable.game import Game
 from GameTable.player import Player
 from GameTable.gameServer import Server
 from Util.message import Message
