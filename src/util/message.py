@@ -23,3 +23,13 @@ class Message(object):
         if self.data == None:
              self.data = {}
         self.data[key] = value
+
+
+if __name__ == '__main__':
+    import json
+    mockMessage = Message()
+    mockMessage.setAction("Test")
+    mockMessage.addData("id", 1)
+    mockMessage.addData("data", 12345)
+    string = json.dumps(mockMessage.__dict__ )
+    print string

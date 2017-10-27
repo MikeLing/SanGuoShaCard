@@ -1,5 +1,5 @@
 import json
-from GameTable.gameServer import Server
+from game_table.server import Server
 
 class Player(object):
     
@@ -94,12 +94,12 @@ class Player(object):
         self.cards = cards
 
     def sendSelf(self, message):
-        payload = json.dumps(message, ensure_ascii = False).encode('utf8')
+        payload = json.dumps(message.__dict__, ensure_ascii = False).encode('utf8')
         self.sender.sendMessage(payload, isBinary = False)
 
     def broadcastIgnoreSelf(self, message):
         connectionList = Server.getConnections()
         for client in connectionList:
             if client.getId() != self.getId():
-                payload = json.dumps(message, ensure_ascii = False).encode('utf8')
+                payload = json.dumps(message.__dict__, ensure_ascii = False).encode('utf8')
                 client.sendMessage(payload, isBinary = False)

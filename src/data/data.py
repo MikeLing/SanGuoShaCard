@@ -1,9 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-from Models.card import Cards
-from Models.card import Type
-from Models.hero import Hero
-from Util.Singleton import Singleton
+from models.card import Cards
+from models.card import Type
+from models.hero import Hero
+from util.singleton import Singleton
 
 
 @Singleton

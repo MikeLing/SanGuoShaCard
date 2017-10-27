@@ -1,6 +1,6 @@
 import json
-from Util.message import Message
-from Util.Singleton import Singleton
+from util.message import Message
+from util.Singleton import Singleton
 
 
 class Server(object):
@@ -37,7 +37,7 @@ class Server(object):
         """
         for client in Server.connections:
             try:
-                payload = json.dumps(message, ensure_ascii = False).encode('utf8')
+                payload = json.dumps(message.__dict__, ensure_ascii = False).encode('utf8')
                 client.sendMessage(payload, isBinary = False)
             except IOError as e:
                 print "Get an error in gameServer!"

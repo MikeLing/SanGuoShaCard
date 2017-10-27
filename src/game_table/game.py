@@ -1,7 +1,8 @@
-from Data.data import Data
 from random import shuffle
-from GameTable.gameServer import Server
-from Util.message import Message
+
+from data.data import Data
+from game_table.server import Server
+from util.message import Message
 
 class Game(object):
     # players

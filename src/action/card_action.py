@@ -1,13 +1,13 @@
 import json
 
-from Models.card import Cards
-from Data.data import GAMEDATA
-from Models.card import Type
-from GameTable.game import Game
-from GameTable.player import Player
-from GameTable.gameServer import Server
-from Util.message import Message
-from Action.slashAction import SlashAction
+from models.card import Cards
+from data.data import GAMEDATA
+from models.card import Type
+from game_table.game import Game
+from game_table.player import Player
+from game_table.server import Server
+from util.message import Message
+from action.slashAction import SlashAction
 
 class CardAction(object):
     

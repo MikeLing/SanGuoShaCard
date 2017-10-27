@@ -1,10 +1,10 @@
 from autobahn.twisted.websocket import WebSocketClientProtocol
-from GameTable.gameServer import Server
-from Util.message import Message
-from GameTable.gameTable import Game
-from GameTable.player import Player
+from game_table.server import Server
+from util.message import Message
+from game_table.game import Game
+from game_table.player import Player
 
-class PlayerClient(WebSocketClientProtocol):
+class Client(WebSocketClientProtocol):
     def __init__(self, id):
         self.id = id
         self.player = None
@@ -21,7 +21,7 @@ class PlayerClient(WebSocketClientProtocol):
     def onOpen(self):
         Server.addConnections(self)
         self.player = Player(id, self)
-        Game.addConnections(self.player)
+        Game.players.append(self.player)
 
         # new connection
         loginMessage = Message()
