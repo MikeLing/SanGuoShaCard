@@ -1,5 +1,5 @@
 from autobahn.twisted.websocket import WebSocketClientProtocol
-from GameTable.gameServer import GAMESERVER
+from GameTable.gameServer import Server
 from Util.message import Message
 
 class PlayerClient(WebSocketClientProtocol):
@@ -17,7 +17,7 @@ class PlayerClient(WebSocketClientProtocol):
         return self._id
     
     def onOpen(self):
-        GAMESERVER.addConnections(self)
+        Server.addConnections(self)
         player = new player(id, self)
         Game.addConnections(player)
 
@@ -31,13 +31,13 @@ class PlayerClient(WebSocketClientProtocol):
         newMessage = Message()
         newMessage.setAction("new_login")
         newMessage.setData(self.getId())
-        GAMESERVER.broadcast(newMessage)
+        Server.broadcast(newMessage)
     
     def onClose(self):
         leaveMessage = Message()
         leaveMessage.setAction("logout")
         leaveMessage.setData(self.getId())
-        GAMESERVER.broadcast(leaveMessage)
+        Server.broadcast(leaveMessage)
 
         if Game.starting and player in Game.getPlayer()
 

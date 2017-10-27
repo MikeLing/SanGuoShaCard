@@ -1,7 +1,7 @@
 import json
-from GameTable.gameServer import GAMESERVER
+from GameTable.gameServer import Server
 
-class player(object):
+class Player(object):
     
     def __init__(self, id, senderClient):
         self.id = id
@@ -98,7 +98,7 @@ class player(object):
         self.sender.sendMessage(payload, isBinary = False)
 
     def broadcastIgnoreSelf(self, message):
-        connectionList = GAMESERVER.getConnections()
+        connectionList = Server.getConnections()
         for client in connectionList:
             if client.getId() != self.getId():
                 payload = json.dumps(message, ensure_ascii = False).encode('utf8')

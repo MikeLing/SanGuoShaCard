@@ -1,54 +1,53 @@
 from Data.data import Data
 from random import shuffle
-from GameTable.gameServer import GAMESERVER
+from GameTable.gameServer import Server
 from Util.message import Message
 
 class Game(object):
+    # players
+    players = []
+    # watchers
+    watchers = []
+    # If this game already start
+    start = False
+    # time for each round of player
+    randInterval = 15
+    # room name
+    name = "一号桌"
+    # available card heap
+    availableCards = []
 
-    def __init__(self):
-        # players
-        self.players = []
-        # watchers
-        self.watchers = []
-        # If this game already start
-        self.start = False
-        # time for each round of player
-        self.randInterval = 15
-        # room name
-        self.name = "一号桌"
-        # available card heap
-        self.availableCards = []
+    # discard card heap
+    discardCards = []
 
-        # discard card heap
-        self.discardCards = []
+    # current player
+    currentPlayer = None
 
-        # current player
-        self.currentPlayer = None
+    # game action
+    actions = []
 
-        # game action
-        self.actions = []
-
-    def init_game_table(self):
+    @staticmethod
+    def init_game_table():
         # init all the cards and hero
-        self.start = True
+        Game.start = True
         PlayersId = []
 
         # init player slot
-        for player in self.players:
+        for player in Game.players:
             PlayersId.append(player.getId())
 
         # init card heap
-        self.availableCards = GAMEDATA.get_cardHeap()
-        shuffle(self.availableCards)
+        Game.availableCards = GAMEDATA.get_cardHeap()
+        shuffle(Game.availableCards)
 
         # init player
-        for player in self.players:
+        for player in Game.players:
             player.setMaxLifePoint(player.getHero().lifePoint)
             player.setLifePoint(player.getHero().lifePoint)
 
             # give each player 4 cards
             for i in xrange(4):
-                player.getCards().append(self.availableCards.pop())
+                player.getCards().append(Game.availableCards.pop())
             
             startMessage = Message()
             startMessage.setAction("start")
@@ -68,26 +67,26 @@ class Game(object):
             player.sendSelf(selfMessage)
         
         # Game started
-        self.currentPlayer = players[0]
-        self.actions.add(new CardAction(currentPlayer))
-        GAMESERVER.broadcast(Message("begining", currentPlayer.getId()))
+        Game.currentPlayer = Game.players[0]
+        Game.actions.add(new CardAction(Game.currentPlayer))
+        Server.broadcast(Message("begining", Game.currentPlayer.getId()))
 
+    @staticmethod
+    def end():
+        Game.start = False
+        Game.currentPlayer = None
 
-    def end(self):
-        self.start = False
-        self.currentPlayer = None
+        Game.availableCards = []
+        Game.discardCards = []
 
-        self.availableCards = []
-        self.discardCards = []
-
-        self.actions = []
+        Game.actions = []
 
         # reset all the heros
         for hero in GAMEDATA.get_heroList():
             hero.selected = False
 
         # reset all the player
-        for p in self.players:
+        for p in Game.players:
             p.setCards([])
             p.setGeneral(None)
 
