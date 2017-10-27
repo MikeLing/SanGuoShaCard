@@ -68,7 +68,7 @@ class Game(object):
         
         # Game started
         Game.currentPlayer = Game.players[0]
-        Game.actions.add(new CardAction(Game.currentPlayer))
+        Game.actions.add(CardAction(Game.currentPlayer))
         Server.broadcast(Message("begining", Game.currentPlayer.getId()))
 
     @staticmethod
