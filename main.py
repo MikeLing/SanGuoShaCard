@@ -133,7 +133,7 @@ def action(message):
     """
         Preformance the card action
     """
-    pass
+    
 
 
 @socketio.on('text')

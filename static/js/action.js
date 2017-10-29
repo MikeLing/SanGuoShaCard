@@ -25,9 +25,7 @@ $(document).ready(function(){
     });
 
     socket.on('assign', function(data) {
-        console.log("Hey there")
         var cards = data.msg.cards;
-        console.log(cards)
         document.getElementById("cards").textContent=cards;
     });
 

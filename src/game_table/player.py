@@ -1,5 +1,4 @@
 import json
-from src.game_table.server import Server
 
 
 class Player(object):
