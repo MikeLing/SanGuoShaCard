@@ -7,8 +7,8 @@ from flask_socketio import SocketIO, emit, join_room, leave_room
 from flask import Flask, render_template, session, request, redirect, url_for
 
 from src.data.data import GAMEDATA
+from src.game_table.game import Game
 from src.util.forms import LoginForm
-from src.game_table.client import Client
 from src.game_table.player import Player
 from src.models.stage import Stage
 
@@ -21,19 +21,8 @@ app.config['SECRET_KEY'] = 'secret!'
 CORS(app)
 socketio = SocketIO(app)
 
-
-# all the player in this room
-USERLIST = []
-
-# game data for this room
-hero_list = GAMEDATA.get_heroList()
-card_list = GAMEDATA.get_cardHeap()
-
 # game stage
 STAGE = Stage.ending
-
-# current player
-playing_one = None
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -72,21 +61,8 @@ def start(message):
     if STAGE == Stage.starting:
         emit('message', {'msg': 'warning!'}, room=request.sid)
     else:
-        # choose one
-        playing_one = USERLIST[randint(0, len(set(USERLIST)))]
-
-        # recycle the card heap
-        if len(card_list) < 2:
-            card_list.append(GAMEDATA.get_cardHeap())
-            shuffle(card_list)
-
-        # give two more cards
-        add_cards = card_list[0:2]
-        c = playing_one.getPlayer().getCards()
-        c += add_cards
-        emit('assign', {
-             'msg': {'cards': [i.title for i in c]}}, room=playing_one.getId())
-
+        Game.room = session.get('room')
+        Game.init_game_table()
         # start the game
         STAGE = Stage.starting
 
@@ -100,40 +76,23 @@ def joined(message):
 
     room = session.get('room')
     # get the session id
-    current_user = Client(request.sid)
     join_room(room)
     emit('status', {'msg': session.get('name') +
                     ' has entered the room.'}, room=room)
 
-    # make sure there are enough slot for this user
-    if len(hero_list) < 1 and len(card_list) < 4:
-        emit('status',
-             {'msg': session.get('name') + ' has entered the room. But no slot for him'}, room=current_user)
-    else:
-        # assign a hero and cards
-        current_hero = hero_list.pop(-1)
-        shuffle(card_list)
-        current_cards = card_list[0:4]
-        current_player = Player(request.sid)
-        current_player.setCards(current_cards)
-        current_player.setHero(current_hero)
-        current_user.setPlayer(current_player)
-
-        # append user into user list
-        USERLIST.append(current_user)
-        emit('player',
-             {'msg': {'hero': [current_hero.name, current_hero.skill, current_hero.lifePoint],
-                      'cards': [i.title for i in current_cards],
-                      'name': session.get('name')}},
-             room=request.sid)
+    # append user into user list
+    Game.players.append(Player(request.sid))
 
 
+# TODO
 @socketio.on('action')
 def action(message):
     """
         Preformance the card action
     """
-    
+    # the target player
+    target_id = message['target_player']
+    using_card = message['card_id']
 
 
 @socketio.on('text')

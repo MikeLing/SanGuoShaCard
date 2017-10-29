@@ -8,6 +8,7 @@ from game_table.player import Player
 from game_table.server import Server
 from util.message import Message
 from action.slashAction import SlashAction
+from flask_socketio import emit
 
 
 class SlashAction(object):
@@ -15,7 +16,7 @@ class SlashAction(object):
     def __init__(self, p, t):
         self.player = p
         self.target = t
-    
+
     def getPlayer(self):
         return self.player
 
@@ -43,9 +44,10 @@ class SlashAction(object):
                     else:
                         self.target.sendSelf(Message("message", "Wrong card"))
                 else:
-                    self.target.sendSelf(Message("message", "You have not this card"))
+                    self.target.sendSelf(
+                        Message("message", "You have not this card"))
             elif action == "game_cancel":
                 self.target.setHealth(self.target.getHealth() - 1)
                 Game.actions.remove(self)
         else:
-            sender.sendSelf(Message("message", "It is not your turn"));
+            sender.sendSelf(Message("message", "It is not your turn"))

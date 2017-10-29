@@ -2,9 +2,10 @@
 
 from random import shuffle
 
-from src.data.data import Data
-from src.game_table.server import Server
+from src.data.data import GAMEDATA
 from src.util.message import Message
+
+from flask_socketio import emit
 
 
 class Game(object):
@@ -16,8 +17,10 @@ class Game(object):
     start = False
     # time for each round of player
     randInterval = 15
-    # room name
-    name = "一号桌"
+
+    # room id
+    room = None
+
     # available card heap
     availableCards = []
 
@@ -46,6 +49,8 @@ class Game(object):
 
         # init player
         for player in Game.players:
+            player.setHero(GAMEDATA.get_heroList().pop(-1))
+            player.getHero().selected = False
             player.setMaxLifePoint(player.getHero().lifePoint)
             player.setLifePoint(player.getHero().lifePoint)
 
@@ -53,27 +58,16 @@ class Game(object):
             for i in xrange(4):
                 player.getCards().append(Game.availableCards.pop())
 
-            startMessage = Message()
-            startMessage.setAction("start")
-            startMessage.addData("id", player.getId())
-            startMessage.addData("count", 4)
-            player.broadcastIgnoreSelf(startMessage)
-
-            # send to itself
-            selfMessage = Message()
-            selfMessage.setAction("start")
-            selfMessage.addData("id", player.getId())
-
-            # To tell the user what kind of card he has
-            haveCards = [Data.Cards.indexOf(c) for c in player.getCards()]
-            selfMessage.addData("cards", haveCards)
-            selfMessage.addData("players", playersId)
-            player.sendSelf(selfMessage)
+            # tell the player what kind of cards he has
+            h = player.getHero()
+            message = Message("assign")
+            message.setData({'cards': [i.title for i in player.getCards()],
+                             'hero': [h.name, h.lifePoint, h.skill]})
+            emit("init", message.__dict__, room=player.getId())
 
         # Game started
         Game.currentPlayer = Game.players[0]
-        Game.actions.add(CardAction(Game.currentPlayer))
-        Server.broadcast(Message("begining", Game.currentPlayer.getId()))
+        emit("current_player", Game.currentPlayer.getId(), room=Game.room)
 
     @staticmethod
     def end():
@@ -94,4 +88,4 @@ class Game(object):
             p.setCards([])
             p.setGeneral(None)
 
-        Server.broadcast(Message("ending"))
+        emit(Message("end", Game.currentPlayer.getId(), room=Game.room))

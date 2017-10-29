@@ -2,8 +2,10 @@
     A model to represent hero in the game
 """
 
+
 class Hero(object):
     """A class represent hero in the game"""
+
     def __init__(self, name, lifePoint, skills):
         self._name = name
         self._lifePoint = lifePoint
@@ -41,4 +43,3 @@ class Hero(object):
     @selected.setter
     def selected(self, isSelected):
         self._selected = isSelected
-
