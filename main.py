@@ -1,6 +1,6 @@
 import os
 import logging
-from random import shuffle
+from random import shuffle, randint
 
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room, leave_room
@@ -10,6 +10,7 @@ from src.data.data import GAMEDATA
 from src.util.forms import LoginForm
 from src.game_table.client import Client
 from src.game_table.player import Player
+from src.models.stage import Stage
 
 
 LOG = logging.getLogger(__name__)
@@ -27,6 +28,12 @@ USERLIST = []
 # game data for this room
 hero_list = GAMEDATA.get_heroList()
 card_list = GAMEDATA.get_cardHeap()
+
+# game stage
+game_stage = None
+
+# current player
+playing_one = None
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -82,14 +89,26 @@ def joined(message):
         current_player.setCards(current_cards)
         current_player.setHero(current_hero)
         current_user.setPlayer(current_player)
+
         # append user into user list
         USERLIST.append(current_user)
-
         emit('player', 
-            {'msg': {'hero':[current_hero.__dict__], 
+            {'msg': {'hero':[current_hero.name, current_hero.skill, current_hero.lifePoint], 
                      'cards': [i.title for i in current_cards], 
                      'name': session.get('name')}}, 
             room=request.sid)
+
+@socketio.on('start')
+def start(message):
+    """
+        Start this game. Will assign two more cards to the player if that's his round.
+    """
+    if game_stage:
+        emit('message', {'msg': "Warning"}, room=request.sid)
+    else:
+        playing_one = USERLIST[randint(0, len(USERLIST))]
+        game_stage = Stage.starting
+    
 
 @socketio.on('text')
 def text(message):
