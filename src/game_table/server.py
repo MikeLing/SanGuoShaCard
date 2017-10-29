@@ -1,6 +1,6 @@
 import json
-from util.message import Message
-from util.Singleton import Singleton
+from src.util.message import Message
+from src.util.singleton import Singleton
 
 
 class Server(object):

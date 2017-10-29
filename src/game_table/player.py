@@ -1,11 +1,10 @@
 import json
-from game_table.server import Server
+from src.game_table.server import Server
 
 class Player(object):
     
-    def __init__(self, id, senderClient):
+    def __init__(self, id):
         self.id = id
-        self.sender = senderClient
 
         self.lifePoint = 0
         self.maxLifePoint = 0
@@ -25,10 +24,7 @@ class Player(object):
         self.indulgence = None
     
     def __eq__(self, other):
-        return (self.id == other.id and self.hero == other.forwardheroLinks)
-    
-    def getSender(self):
-        return self.sender
+        return (self.id == other.id and self.hero == other.hero)
 
     def getId(self):
         return self.id
@@ -56,6 +52,8 @@ class Player(object):
 
     def setHero(self, hero):
         self.hero = hero
+        self.maxLifePoint = hero.lifePoint
+        self.lifePoint = hero.lifePoint
     
     def getLifePoint(self):
         return self.lifePoint
@@ -93,13 +91,3 @@ class Player(object):
     def setCards(self, cards):
         self.cards = cards
 
-    def sendSelf(self, message):
-        payload = json.dumps(message.__dict__, ensure_ascii = False).encode('utf8')
-        self.sender.sendMessage(payload, isBinary = False)
-
-    def broadcastIgnoreSelf(self, message):
-        connectionList = Server.getConnections()
-        for client in connectionList:
-            if client.getId() != self.getId():
-                payload = json.dumps(message.__dict__, ensure_ascii = False).encode('utf8')
-                client.sendMessage(payload, isBinary = False)

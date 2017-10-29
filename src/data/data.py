@@ -1,9 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-from models.card import Cards
-from models.card import Type
-from models.hero import Hero
-from util.singleton import Singleton
+from src.models.card import Cards
+from src.models.card import Type
+from src.models.hero import Hero
+from src.util.singleton import Singleton
 
 
 @Singleton
@@ -13,12 +13,12 @@ class Data(object):
         self.heroList = []
         self.cardHeap = []
 
-        self.heroList.append(Hero("曹操"， 4， "曹操的技能"))
-        self.heroList.append(Hero("刘备"， 4， "刘备的技能"))
-        self.heroList.append(Hero("诸葛亮"， 3， "诸葛亮的技能"))
-        self.heroList.append(Hero("曹丕"， 4， "曹丕的技能"))
-        self.heroList.append(Hero("关羽"， 4， "关羽的技能"))
-        self.heroList.append(Hero("张飞"， 4， "张飞的技能"))
+        self.heroList.append(Hero("曹操", 4, "曹操的技能"))
+        self.heroList.append(Hero("刘备", 4, "刘备的技能"))
+        self.heroList.append(Hero("诸葛亮", 3, "诸葛亮的技能"))
+        self.heroList.append(Hero("曹丕", 4, "曹丕的技能"))
+        self.heroList.append(Hero("关羽", 4, "关羽的技能"))
+        self.heroList.append(Hero("张飞", 4, "张飞的技能"))
 
         self.cardHeap.append(Cards("杀", Type.slash, 1))
         self.cardHeap.append(Cards("杀", Type.slash, 2))

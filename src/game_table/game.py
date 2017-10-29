@@ -1,8 +1,10 @@
+# -*- coding: UTF-8 -*-
+
 from random import shuffle
 
-from data.data import Data
-from game_table.server import Server
-from util.message import Message
+from src.data.data import Data
+from src.game_table.server import Server
+from src.util.message import Message
 
 class Game(object):
     # players
