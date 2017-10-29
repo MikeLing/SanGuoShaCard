@@ -30,7 +30,7 @@ hero_list = GAMEDATA.get_heroList()
 card_list = GAMEDATA.get_cardHeap()
 
 # game stage
-game_stage = None
+STAGE = Stage.ending
 
 # current player
 playing_one = None
@@ -61,7 +61,32 @@ def game():
     if name == '' or room == '':
         return redirect(url_for('index'))
     return render_template('game.html', name=name, room=room)
-    
+
+@socketio.on('start')
+def start(message):
+    """
+        Start this game. Will assign two more cards to the player if that's his round.
+    """
+    global STAGE
+    if STAGE == Stage.starting:
+        emit('message', {'msg': 'warning!'}, room = request.sid)
+    else:
+        # choose one
+        playing_one = USERLIST[randint(0, len(set(USERLIST)))]
+
+        # recycle the card heap
+        if len(card_list) < 2:
+            card_list.append(GAMEDATA.get_cardHeap())
+            shuffle(card_list)
+
+        # give two more cards
+        add_cards = card_list[0:2]
+        c = playing_one.getPlayer().getCards()
+        c += add_cards
+        emit('assign', {'msg': {'cards': [i.title for i in c]}}, room=playing_one.getId())
+
+        # start the game
+        STAGE = Stage.starting
 
 @socketio.on('joined')
 def joined(message):
@@ -98,17 +123,12 @@ def joined(message):
                      'name': session.get('name')}}, 
             room=request.sid)
 
-@socketio.on('start')
-def start(message):
+@socketio.on('action')
+def action(message):
     """
-        Start this game. Will assign two more cards to the player if that's his round.
+        Preformance the card action
     """
-    if game_stage:
-        emit('message', {'msg': "Warning"}, room=request.sid)
-    else:
-        playing_one = USERLIST[randint(0, len(USERLIST))]
-        game_stage = Stage.starting
-    
+    pass
 
 @socketio.on('text')
 def text(message):

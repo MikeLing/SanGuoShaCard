@@ -1,8 +1,6 @@
-from autobahn.twisted.websocket import WebSocketClientProtocol
-from src.game_table.server import Server
-from src.util.message import Message
-from src.game_table.game import Game
-from src.game_table.player import Player
+"""
+    This module is the definiation of client online
+"""
 
 class Client():
     def __init__(self, id):

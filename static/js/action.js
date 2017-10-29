@@ -24,6 +24,13 @@ $(document).ready(function(){
         $('#chat').scrollTop($('#chat')[0].scrollHeight);
     });
 
+    socket.on('assign', function(data) {
+        console.log("Hey there")
+        var cards = data.msg.cards;
+        console.log(cards)
+        document.getElementById("cards").textContent=cards;
+    });
+
     $('#text').keypress(function(e) {
         var code = e.keyCode || e.which;
         if (code == 13) {
@@ -42,7 +49,6 @@ function leave_room() {
         window.location.href = "{{ url_for('index') }}";
     });
 }
-
 function start_the_game(){
-    socket.emit('start', {}, '');
+    socket.emit('start', {});
 }
