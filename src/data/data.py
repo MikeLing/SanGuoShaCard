@@ -48,11 +48,12 @@ class Data(object):
         self.cardHeap.append(Cards("桃", Type.peach, 5))
         self.cardHeap.append(Cards("桃", Type.peach, 6))
         self.cardHeap.append(Cards("桃", Type.peach, 7))
-    
+
     def get_heroList(self):
         return self.heroList
 
     def get_cardHeap(self):
         return self.cardHeap
+
 
 GAMEDATA = Data.Instance()

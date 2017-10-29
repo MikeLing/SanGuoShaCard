@@ -62,6 +62,7 @@ def game():
         return redirect(url_for('index'))
     return render_template('game.html', name=name, room=room)
 
+
 @socketio.on('start')
 def start(message):
     """
@@ -69,7 +70,7 @@ def start(message):
     """
     global STAGE
     if STAGE == Stage.starting:
-        emit('message', {'msg': 'warning!'}, room = request.sid)
+        emit('message', {'msg': 'warning!'}, room=request.sid)
     else:
         # choose one
         playing_one = USERLIST[randint(0, len(set(USERLIST)))]
@@ -83,10 +84,12 @@ def start(message):
         add_cards = card_list[0:2]
         c = playing_one.getPlayer().getCards()
         c += add_cards
-        emit('assign', {'msg': {'cards': [i.title for i in c]}}, room=playing_one.getId())
+        emit('assign', {
+             'msg': {'cards': [i.title for i in c]}}, room=playing_one.getId())
 
         # start the game
         STAGE = Stage.starting
+
 
 @socketio.on('joined')
 def joined(message):
@@ -99,12 +102,13 @@ def joined(message):
     # get the session id
     current_user = Client(request.sid)
     join_room(room)
-    emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
+    emit('status', {'msg': session.get('name') +
+                    ' has entered the room.'}, room=room)
 
     # make sure there are enough slot for this user
     if len(hero_list) < 1 and len(card_list) < 4:
-        emit('status', 
-            {'msg': session.get('name') + ' has entered the room. But no slot for him'}, room=current_user)
+        emit('status',
+             {'msg': session.get('name') + ' has entered the room. But no slot for him'}, room=current_user)
     else:
         # assign a hero and cards
         current_hero = hero_list.pop(-1)
@@ -117,11 +121,12 @@ def joined(message):
 
         # append user into user list
         USERLIST.append(current_user)
-        emit('player', 
-            {'msg': {'hero':[current_hero.name, current_hero.skill, current_hero.lifePoint], 
-                     'cards': [i.title for i in current_cards], 
-                     'name': session.get('name')}}, 
-            room=request.sid)
+        emit('player',
+             {'msg': {'hero': [current_hero.name, current_hero.skill, current_hero.lifePoint],
+                      'cards': [i.title for i in current_cards],
+                      'name': session.get('name')}},
+             room=request.sid)
+
 
 @socketio.on('action')
 def action(message):
@@ -130,6 +135,7 @@ def action(message):
     """
     pass
 
+
 @socketio.on('text')
 def text(message):
     """
@@ -137,7 +143,8 @@ def text(message):
         The message is sent to all people in the room.
     """
     room = session.get('room')
-    emit('message', {'msg': session.get('name') + ':' + message['msg']}, room=room)
+    emit('message', {'msg': session.get('name') +
+                     ':' + message['msg']}, room=room)
 
 
 @socketio.on('left')
@@ -148,7 +155,9 @@ def left(message):
     """
     room = session.get('room')
     leave_room(room)
-    emit('status', {'msg': session.get('name') + ' has left the room.'}, room=room)
+    emit('status', {'msg': session.get('name') +
+                    ' has left the room.'}, room=room)
+
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

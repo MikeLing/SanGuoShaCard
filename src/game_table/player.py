@@ -1,8 +1,9 @@
 import json
 from src.game_table.server import Server
 
+
 class Player(object):
-    
+
     def __init__(self, id):
         self.id = id
 
@@ -22,7 +23,7 @@ class Player(object):
         # game rule (The card can reach other player or not)
         self.supplyShortage = None
         self.indulgence = None
-    
+
     def __eq__(self, other):
         return (self.id == other.id and self.hero == other.hero)
 
@@ -34,7 +35,7 @@ class Player(object):
 
     def setMaxLifePoint(self, mLifePoint):
         self.maxLifePoint = mLifePoint
-    
+
     def getSupplyShortage(self):
         return self.supplyShortage
 
@@ -46,7 +47,7 @@ class Player(object):
 
     def setIndulgence(self, indulgence):
         self.indulgence = indulgence
-    
+
     def getHero(self):
         return self.hero
 
@@ -54,7 +55,7 @@ class Player(object):
         self.hero = hero
         self.maxLifePoint = hero.lifePoint
         self.lifePoint = hero.lifePoint
-    
+
     def getLifePoint(self):
         return self.lifePoint
 
@@ -66,7 +67,7 @@ class Player(object):
 
     def setWeapon(self, weapon):
         self.waepon = weapon
-    
+
     def getArmor(self):
         return self.armor
 
@@ -84,10 +85,9 @@ class Player(object):
 
     def setMinus(self, minus):
         self.minus = minus
-    
+
     def getCards(self):
         return self.cards
 
     def setCards(self, cards):
         self.cards = cards
-

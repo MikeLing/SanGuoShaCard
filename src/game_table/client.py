@@ -2,6 +2,7 @@
     This module is the definiation of client online
 """
 
+
 class Client():
     def __init__(self, id):
         self.id = id

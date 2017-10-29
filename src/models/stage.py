@@ -10,6 +10,7 @@
 """
 from enum import Enum, unique
 
+
 @unique
 class Stage(Enum):
     """The stage of game which will be a enum type"""

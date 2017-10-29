@@ -6,6 +6,7 @@ from src.data.data import Data
 from src.game_table.server import Server
 from src.util.message import Message
 
+
 class Game(object):
     # players
     players = []
@@ -51,7 +52,7 @@ class Game(object):
             # give each player 4 cards
             for i in xrange(4):
                 player.getCards().append(Game.availableCards.pop())
-            
+
             startMessage = Message()
             startMessage.setAction("start")
             startMessage.addData("id", player.getId())
@@ -68,7 +69,7 @@ class Game(object):
             selfMessage.addData("cards", haveCards)
             selfMessage.addData("players", playersId)
             player.sendSelf(selfMessage)
-        
+
         # Game started
         Game.currentPlayer = Game.players[0]
         Game.actions.add(CardAction(Game.currentPlayer))
@@ -93,4 +94,4 @@ class Game(object):
             p.setCards([])
             p.setGeneral(None)
 
-        Server.broadcast(Message("ending"));
+        Server.broadcast(Message("ending"))

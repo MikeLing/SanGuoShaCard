@@ -12,8 +12,10 @@ class Type(Enum):
     dodge = 1
     peach = 2
 
+
 class Cards(object):
     """Represent the cards"""
+
     def __init__(self, title, typeOfCard, point):
         self._title = title
         self._type = typeOfCard
@@ -30,4 +32,3 @@ class Cards(object):
     @property
     def point(self):
         return self._point
-
