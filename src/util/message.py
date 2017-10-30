@@ -1,5 +1,5 @@
 """
-    A class to describle message bewteen clients(user)
+    A class to describle message bewteen clients(user) inside
 """
 
 

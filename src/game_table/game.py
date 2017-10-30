@@ -1,3 +1,17 @@
+"""
+Main model of game.
+
+All the relate information for sanguosha game will been defined in here. Which will include:
+* All the players in the game room
+* if there are no enough slot for this room, other users will be convered to watcher
+* Game status
+* time for each round
+* room id 
+* card heap (both using and discrd cards)
+* game action(use card, discrd card)
+* begin and end this game
+"""
+
 # -*- coding: UTF-8 -*-
 
 from random import shuffle

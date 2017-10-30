@@ -1,12 +1,13 @@
 """
-    modle represent the stage of game. 
-    There are only six kinds of stage for each game:
-    - **starting**
-    - **judgment**
-    - **getCards**
-    - **useCards**
-    - **discard**
-    - **ending**
+Model represent the stage of game.
+
+There are only six kinds of stage for each game:
+* starting
+* judgment
+* getCards
+* useCards
+* discard
+* ending
 """
 from enum import Enum, unique
 

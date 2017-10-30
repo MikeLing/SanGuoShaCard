@@ -1,3 +1,7 @@
+"""
+Defination of game player
+"""
+
 import json
 
 

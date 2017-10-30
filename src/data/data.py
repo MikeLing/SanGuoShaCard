@@ -1,5 +1,12 @@
 # -*- coding: UTF-8 -*-
 
+"""
+All the data will been used in the game.
+
+Data defination for hero and cards, and warp as singleton since we only need one instantiation of it.
+"""
+
+
 from src.models.card import Cards
 from src.models.card import Type
 from src.models.hero import Hero
