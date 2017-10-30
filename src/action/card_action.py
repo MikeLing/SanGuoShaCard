@@ -5,9 +5,8 @@ from src.data.data import GAMEDATA
 from src.models.card import Type
 from src.game_table.game import Game
 from src.game_table.player import Player
-from src.game_table.server import Server
 from src.util.message import Message
-from src.action.slashAction import SlashAction
+from src.action.slash_action import SlashAction
 
 from flask_socketio import emit
 
@@ -17,7 +16,7 @@ class CardAction(object):
     def __init__(self, player):
         self.player = player
 
-    def execute(self, sender, target):
+    def execute(self, sender, packet):
         cards = GAMEDATA.get_cardHeap()
         jsonData = json.loads(packet.decode('utf8'))
         if sender.equals(self.player):
@@ -43,7 +42,7 @@ class CardAction(object):
                     message = Message("game_health")
                     message.addData("player", self.player.getId())
                     message.addData("health", self.player.getHealth())
-                    emit('peach_action', message)
+                    emit('peach_action', message, room=jsonData['room'])
 
                 self.player.getCards().remove(cardId)
                 Game.discards.append(card)
@@ -52,7 +51,7 @@ class CardAction(object):
                 message.addData("card", cardId)
                 message.addData("player", self.player.getId())
                 message.addData("target", targetId)
-                Server.broadcast(message)
+                emit('update', message, room=jsonData['room'])
 
             else:
                 self.player.sendSelf(
@@ -70,7 +69,7 @@ class CardAction(object):
             msgList.append(Message("discard", sender.getId()))
             msgList.append(Message("begining", nextPlayer.getId()))
 
-            Server.broadcast(msgList)
+            emit('update', message, room=jsonData['room'])
 
     def getPlayer(self):
         return self.player

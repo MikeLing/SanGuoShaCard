@@ -11,6 +11,7 @@ from src.game_table.game import Game
 from src.util.forms import LoginForm
 from src.game_table.player import Player
 from src.models.stage import Stage
+from src.action.card_action import CardAction
 
 
 LOG = logging.getLogger(__name__)
@@ -84,7 +85,7 @@ def joined(message):
     Game.players.append(Player(request.sid))
 
 
-# TODO
+# TODO:add js front and interact with it
 @socketio.on('action')
 def action(message):
     """
@@ -93,6 +94,12 @@ def action(message):
     # the target player
     target_id = message['target_player']
     using_card = message['card_id']
+
+    # call card action and execute it.
+    action = CardAction(request.sid)
+    action.execute(request.sid, message.data)
+    Game.actions.append(action)
+
 
 
 @socketio.on('text')

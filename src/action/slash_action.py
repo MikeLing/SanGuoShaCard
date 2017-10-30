@@ -1,13 +1,11 @@
 import json
 
-from models.card import Cards
-from data.data import GAMEDATA
-from models.card import Type
-from game_table.game import Game
-from game_table.player import Player
-from game_table.server import Server
-from util.message import Message
-from action.slashAction import SlashAction
+from src.models.card import Cards
+from src.data.data import GAMEDATA
+from src.models.card import Type
+from src.game_table.game import Game
+from src.game_table.player import Player
+from src.util.message import Message
 from flask_socketio import emit
 
 
@@ -40,14 +38,13 @@ class SlashAction(object):
                         message = Message("game_card")
                         message.addData("card", cardId)
                         message.addData("player", self.target.getId())
-                        Server.broadcast(message)
+                        emit('slash_action', message, room=jsonData['room'])
                     else:
-                        self.target.sendSelf(Message("message", "Wrong card"))
+                        emit('warning', "Wrong card", room=jsonData['room'])
                 else:
-                    self.target.sendSelf(
-                        Message("message", "You have not this card"))
+                    emit('warning', "You don't have that card", room=sender)
             elif action == "game_cancel":
                 self.target.setHealth(self.target.getHealth() - 1)
                 Game.actions.remove(self)
         else:
-            sender.sendSelf(Message("message", "It is not your turn"))
+            emit('warning', "It's not your turn", room=sender)
