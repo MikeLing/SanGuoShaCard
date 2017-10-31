@@ -28,12 +28,11 @@ And the server's message dealing flow are shown as follow:
 #### Ending stage:
 After the game end, the server will broadcast the ending message to all the clients. After all the session on that room ended, the server will recycle all the memory assigned to that room.
 
-![picture](https://github.com/MikeLing/SanGuoShaCard/blob/master/doc/Untitled%20Diagram.jpg)
 
 #### class design
+Some core classes are shown as follow:
 
-
-
+![picture](https://github.com/MikeLing/SanGuoShaCard/blob/master/doc/Untitled.jpg)
 ### Milestone
 
 ~~define basic data models~~
