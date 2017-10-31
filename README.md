@@ -18,7 +18,7 @@ A player client will send a join request to server which includes the player id,
 ![picture](https://github.com/MikeLing/SanGuoShaCard/blob/master/doc/server_client.jpg)
 
 #### Playing stage:
-After all player be 'seperated' into a same room, all the game logic dealing and game flow contoring will been done in the room instance, and the server will only work as a message dispatcher and receiver. The player send a 'Action'(game action or card action) to the client and client will seal and package that action with player id and room id to the server. The server will accept it and dispatch the message to correspond room. Then, inside the room, will unpackage the message and starting a series of game logic dealing.  The data will be send as brodcast to everyone in that room to update the other players' status and game stage, after the game logic done.
+After all players be 'seperated' into a same room, all the game logic and game flow contoring will been done in the room instance, and the server will only works as a message dispatcher and receiver. After player send a 'Action'(game action or card action) to the client, the client will package that action with player id and room id and send to the server. The server will accept it and dispatch the message to correspond room. Then, inside the room,it will unpackages the message and begin a series of game logic dealing.  The data will be sended as brodcast message to everyone in that room so all the players can update the other players' status and game stage, after the game logic done.
 
 ![picture](https://github.com/MikeLing/SanGuoShaCard/blob/master/doc/cs2.jpg)
 
@@ -27,6 +27,11 @@ And the server's message dealing flow are shown as follow:
 
 #### Ending stage:
 After the game end, the server will broadcast the ending message to all the clients. After all the session on that room ended, the server will recycle all the memory assigned to that room.
+
+![picture](https://github.com/MikeLing/SanGuoShaCard/blob/master/doc/Untitled%20Diagram.jpg)
+
+#### class design
+
 
 
 ### Milestone
